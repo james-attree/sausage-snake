@@ -9,6 +9,7 @@ const INITIAL_SNAKE = [
 const INITIAL_DIRECTION = { x: 1, y: 0 };
 const DOG = '🐶';
 const BONE = '🦴';
+const WOOF_SOUND = new Audio('/woof.mp3');
 
 function getRandomBone(snake) {
   let newBone;
@@ -75,6 +76,7 @@ export default function App() {
         }
         let newSnake;
         if (newHead.x === bone.x && newHead.y === bone.y) {
+          try { WOOF_SOUND.currentTime = 0; WOOF_SOUND.play(); } catch (e) {}
           newSnake = [newHead, ...prevSnake];
           setBone(getRandomBone(newSnake));
         } else {
