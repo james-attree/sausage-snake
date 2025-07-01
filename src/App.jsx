@@ -29,6 +29,11 @@ export default function App() {
   const [bone, setBone] = useState(getRandomBone(INITIAL_SNAKE));
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(-2);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('highScore');
+    return saved !== null ? parseInt(saved, 10) : 0;
+  });
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
   const moveRef = useRef(direction);
   const gameOverRef = useRef(gameOver);
 
@@ -38,6 +43,14 @@ export default function App() {
   useEffect(() => {
     setScore(s => s + 1);
   }, [bone]);
+
+  useEffect(() => {
+    if (gameOver && score > highScore) {
+      setHighScore(score);
+      localStorage.setItem('highScore', score);
+      setIsNewHighScore(true);
+    }
+  }, [gameOver, score, highScore]);
 
   useEffect(() => {
     if (gameOver) return;
@@ -113,6 +126,7 @@ export default function App() {
     setBone(getRandomBone(INITIAL_SNAKE));
     setGameOver(false);
     setScore(0);
+    setIsNewHighScore(false);
   };
 
   return (
@@ -173,7 +187,7 @@ export default function App() {
           })}
         </div>
         <div style={{ position: 'absolute', top: 8, left: 0, right: 0, textAlign: 'center', fontWeight: 'bold', fontSize: 18 }}>
-          Score: {score}
+          Score: {score} &nbsp;|&nbsp; High Score: {highScore}
         </div>
         {gameOver && (
           <div style={{
@@ -189,8 +203,14 @@ export default function App() {
             justifyContent: 'center',
             zIndex: 2,
           }}>
+            {isNewHighScore && (
+              <div style={{ fontSize: 28, fontWeight: 'bold', color: '#d2691e', marginBottom: 10 }}>
+                🎉 New High Score! 🎉
+              </div>
+            )}
             <div style={{ fontSize: 32, fontWeight: 'bold', marginBottom: 12 }}>Game Over</div>
             <div style={{ fontSize: 20, marginBottom: 20 }}>Score: {score}</div>
+            <div style={{ fontSize: 18, marginBottom: 20 }}>High Score: {highScore}</div>
             <button onClick={handleRestart} style={{ fontSize: 18, padding: '8px 24px', borderRadius: 8, border: 'none', background: '#1976d2', color: '#fff', fontWeight: 'bold' }}>
               Restart
             </button>
