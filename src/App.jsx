@@ -28,12 +28,16 @@ export default function App() {
   const [direction, setDirection] = useState(INITIAL_DIRECTION);
   const [bone, setBone] = useState(getRandomBone(INITIAL_SNAKE));
   const [gameOver, setGameOver] = useState(false);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(-2);
   const moveRef = useRef(direction);
   const gameOverRef = useRef(gameOver);
 
   useEffect(() => { moveRef.current = direction; }, [direction]);
   useEffect(() => { gameOverRef.current = gameOver; }, [gameOver]);
+
+  useEffect(() => {
+    setScore(s => s + 1);
+  }, [bone]);
 
   useEffect(() => {
     if (gameOver) return;
@@ -60,7 +64,6 @@ export default function App() {
         if (newHead.x === bone.x && newHead.y === bone.y) {
           newSnake = [newHead, ...prevSnake];
           setBone(getRandomBone(newSnake));
-          setScore(s => s + 1);
         } else {
           newSnake = [newHead, ...prevSnake.slice(0, -1)];
         }
