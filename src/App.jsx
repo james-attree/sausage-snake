@@ -162,6 +162,9 @@ export default function App() {
       >
         {muted ? '🔇' : '🔊'}
       </button>
+      <div style={{ margin: '16px 0 8px 0', textAlign: 'center', fontWeight: 'bold', fontSize: 18 }}>
+        Score: {score} &nbsp;|&nbsp; High Score: {highScore}
+      </div>
       <div
         style={{
           width: 'min(95vw, 95vh)',
@@ -215,9 +218,6 @@ export default function App() {
               </div>
             );
           })}
-        </div>
-        <div style={{ position: 'absolute', top: 8, left: 0, right: 0, textAlign: 'center', fontWeight: 'bold', fontSize: 18 }}>
-          Score: {score} &nbsp;|&nbsp; High Score: {highScore}
         </div>
         {gameOver && (
           <div style={{
