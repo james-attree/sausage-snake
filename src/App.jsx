@@ -35,6 +35,10 @@ export default function App() {
     return saved !== null ? parseInt(saved, 10) : 0;
   });
   const [isNewHighScore, setIsNewHighScore] = useState(false);
+  const [muted, setMuted] = useState(() => {
+    const saved = localStorage.getItem('muted');
+    return saved === 'true';
+  });
   const moveRef = useRef(direction);
   const gameOverRef = useRef(gameOver);
 
@@ -52,6 +56,10 @@ export default function App() {
       setIsNewHighScore(true);
     }
   }, [score]);
+
+  useEffect(() => {
+    localStorage.setItem('muted', muted);
+  }, [muted]);
 
   useEffect(() => {
     if (gameOver) return;
@@ -76,7 +84,9 @@ export default function App() {
         }
         let newSnake;
         if (newHead.x === bone.x && newHead.y === bone.y) {
-          try { WOOF_SOUND.currentTime = 0; WOOF_SOUND.play(); } catch (e) {}
+          if (!muted) {
+            try { WOOF_SOUND.currentTime = 0; WOOF_SOUND.play(); } catch (e) {}
+          }
           newSnake = [newHead, ...prevSnake];
           setBone(getRandomBone(newSnake));
         } else {
@@ -86,7 +96,7 @@ export default function App() {
       });
     }, 120);
     return () => clearInterval(interval);
-  }, [bone, gameOver]);
+  }, [bone, gameOver, muted]);
 
   // Keyboard controls
   useEffect(() => {
@@ -134,6 +144,24 @@ export default function App() {
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1 style={{ margin: '16px 0 0 0', fontSize: 32, fontWeight: 'bold', letterSpacing: 1 }}>Sausage Snake</h1>
+      <button
+        onClick={() => setMuted(m => !m)}
+        style={{
+          position: 'absolute',
+          top: 24,
+          right: 24,
+          zIndex: 10,
+          background: 'none',
+          border: 'none',
+          fontSize: 28,
+          cursor: 'pointer',
+          outline: 'none',
+        }}
+        aria-label={muted ? 'Unmute' : 'Mute'}
+        title={muted ? 'Unmute' : 'Mute'}
+      >
+        {muted ? '🔇' : '🔊'}
+      </button>
       <div
         style={{
           width: 'min(95vw, 95vh)',
