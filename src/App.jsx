@@ -24,6 +24,38 @@ function getRandomBone(snake) {
   }
 }
 
+// SVG components for dog body and tail (square style)
+function DogBody() {
+  return (
+    <svg viewBox="0 0 40 40" width="1em" height="1em">
+      <rect x="4" y="4" width="32" height="32" rx="8" fill="#b97a56" />
+      <rect x="12" y="16" width="16" height="8" rx="4" fill="#7a4a2a" />
+    </svg>
+  );
+}
+
+function DogTail() {
+  return (
+    <svg viewBox="0 0 40 40" width="1em" height="1em">
+      <rect x="10" y="10" width="20" height="20" rx="8" fill="#b97a56" />
+      <rect x="18" y="4" width="4" height="16" rx="2" fill="#7a4a2a" />
+    </svg>
+  );
+}
+
+// Dog body with feet SVG
+function DogBodyWithFeet() {
+  return (
+    <svg viewBox="0 0 40 40" width="1em" height="1em">
+      <rect x="4" y="4" width="32" height="32" rx="8" fill="#b97a56" />
+      <rect x="12" y="16" width="16" height="8" rx="4" fill="#7a4a2a" />
+      {/* Two feet at the bottom */}
+      <ellipse cx="10" cy="34" rx="3" ry="4" fill="#7a4a2a" />
+      <ellipse cx="30" cy="34" rx="3" ry="4" fill="#7a4a2a" />
+    </svg>
+  );
+}
+
 export default function App() {
   const [snake, setSnake] = useState(INITIAL_SNAKE);
   const [direction, setDirection] = useState(INITIAL_DIRECTION);
@@ -198,9 +230,28 @@ export default function App() {
           {[...Array(GRID_SIZE * GRID_SIZE)].map((_, i) => {
             const x = i % GRID_SIZE;
             const y = Math.floor(i / GRID_SIZE);
-            const isDog = snake[0].x === x && snake[0].y === y;
-            const isSnake = !isDog && snake.some(seg => seg.x === x && seg.y === y);
-            const isBone = bone.x === x && bone.y === y;
+            let content = null;
+            if (snake[0].x === x && snake[0].y === y) {
+              content = '🐶';
+            } else if (snake[snake.length - 1].x === x && snake[snake.length - 1].y === y) {
+              content = <DogTail />;
+            } else {
+              // Find body index (excluding head and tail)
+              const bodyIndex = snake.findIndex((seg, idx) => idx !== 0 && idx !== snake.length - 1 && seg.x === x && seg.y === y);
+              if (bodyIndex !== -1) {
+                // First body segment (after head)
+                if (bodyIndex === 1) {
+                  content = <DogBodyWithFeet />;
+                // Last body segment (before tail)
+                } else if (bodyIndex === snake.length - 2) {
+                  content = <DogBodyWithFeet />;
+                } else {
+                  content = <DogBody />;
+                }
+              } else if (bone.x === x && bone.y === y) {
+                content = BONE;
+              }
+            }
             return (
               <div
                 key={i}
@@ -214,7 +265,7 @@ export default function App() {
                   userSelect: 'none',
                 }}
               >
-                {isDog ? DOG : isSnake ? DOG : isBone ? BONE : ''}
+                {content}
               </div>
             );
           })}
