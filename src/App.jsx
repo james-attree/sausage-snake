@@ -46,12 +46,12 @@ export default function App() {
   }, [bone]);
 
   useEffect(() => {
-    if (gameOver && score > highScore) {
+    if (score > highScore) {
       setHighScore(score);
       localStorage.setItem('highScore', score);
       setIsNewHighScore(true);
     }
-  }, [gameOver, score, highScore]);
+  }, [score]);
 
   useEffect(() => {
     if (gameOver) return;
