@@ -298,6 +298,9 @@ export default function App() {
           </div>
         )}
       </div>
+      <div style={{ marginTop: 24, textAlign: 'center', color: '#888', fontSize: 15 }}>
+        Made with ❤️ for Jules
+      </div>
     </div>
   );
 } 
