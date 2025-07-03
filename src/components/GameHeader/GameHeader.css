@@ -1,0 +1,33 @@
+.game-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.game-title {
+  margin: 16px 0 0 0;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.mute-button {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  outline: none;
+}
+
+.score-display {
+  margin: 16px 0 8px 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+} 
