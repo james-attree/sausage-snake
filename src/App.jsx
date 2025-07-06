@@ -126,7 +126,7 @@ export default function App() {
         }
         return newSnake;
       });
-    }, 120);
+    }, 240);
     return () => clearInterval(interval);
   }, [bone, gameOver, muted]);
 
