@@ -48,13 +48,16 @@ export function useGameLogic() {
           x: prevSnake[0].x + moveRef.current.x,
           y: prevSnake[0].y + moveRef.current.y,
         };
-        // Check wall collision
-        if (
-          newHead.x < 0 || newHead.x >= 12 ||
-          newHead.y < 0 || newHead.y >= 12
-        ) {
-          setGameOver(true);
-          return prevSnake;
+        // Handle wall wrapping
+        if (newHead.x < 0) {
+          newHead.x = 11; // Wrap to right side
+        } else if (newHead.x >= 12) {
+          newHead.x = 0; // Wrap to left side
+        }
+        if (newHead.y < 0) {
+          newHead.y = 11; // Wrap to bottom
+        } else if (newHead.y >= 12) {
+          newHead.y = 0; // Wrap to top
         }
         // Check self collision
         if (prevSnake.some(seg => seg.x === newHead.x && seg.y === newHead.y)) {
