@@ -76,7 +76,7 @@ export function useGameLogic() {
         }
         return newSnake;
       });
-    }, 120);
+    }, 180);
     return () => clearInterval(interval);
   }, [bone, gameOver, muted]);
 
